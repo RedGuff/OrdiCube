@@ -81,23 +81,19 @@ void config() {
     lgg = read1DataFile("lgg.txt");
     }
 
-void coutFile(string file = "cout.txt" ){
+void coutFile(string file = "cout.txt") {
     ifstream fichier(file.c_str(), ios::in);
-    if(!fichier)
-    {
+    if(!fichier) {
         cerr << "Impossible to read the file: " << file << "!" << endl;
-    }
-    else
-    {
-        string ligne;
-        while(getline(fichier, ligne))
-        {
-            cout << ligne << endl;
         }
-fichier.close();
+    else {
+        string ligne;
+        while(getline(fichier, ligne)) {
+            cout << ligne << endl;
+            }
+        fichier.close();
+        }
     }
-}
-
 
 void intro(string lgg = "fr") {
 // fr:
@@ -111,6 +107,43 @@ void intro(string lgg = "fr") {
     cout << "     -1 : Combinaison d\'avant, mais au commencement." << endl;
     cout << "      0 : Suite de la partie d\'avant." << endl;
     cout << "1... 20 : Tirage au pseudo-hasard de niveau 1 (facile) jusque 20 (difficile). TODO" << endl;
+    }
+
+
+// cout << interchange("abcdefgh", 0, 7) << endl; // Ok.
+string interchange(string startString = "abcdefgh", int a = 0, int b = 3) { // Ok.
+    clog << "a: " << a << endl;
+    clog << "b: " << b << endl;
+    clog << "startstring: " << startString << endl;
+    assert((a >= 0) && "Erreur de codage : a < 0 !");
+    assert((b >= 0) && "Erreur de codage : b < 0 !");
+    assert((a < startString.size()) && "Erreur de codage : a > start !");
+    assert((b < startString.size()) && "Erreur de codage : b > start !");
+    char x = startString[a];
+    startString[a] = startString[b];
+    startString[b] = x;
+    return startString;
+    }
+
+int findPosIntString(int N = 0, string udt = "123456789") {
+    int a = 0;
+    while((udt[a] - '0') != N){  // Char to int // http://www.cplusplus.com/forum/beginner/68260/
+        a++;
+        if(a > udt.size()) {
+            cerr << "Not in string!" << endl;
+            return -1;
+            }
+        }
+    return a;
+    }
+
+
+
+string joue(string partie, int N) { // ??
+    N = findPosIntString(N, partie); // ??
+    partie = interchange(partie, 1, N);
+//   partie = interchange(partie, (N - 1) % partie.size(), (N + 1) % partie.size());
+    return partie;
     }
 
 string initMix(int choixMenu = 2) { // Todo.
@@ -129,9 +162,20 @@ string initMix(int choixMenu = 2) { // Todo.
         break;
         default: {
             int N = abs(choixMenu); // In order to be more compatible.
+            string workString = "123456789";
             for(int a = 0; a < N; a++) {
+                workString = joue(workString, rand() % 9 + 1);
+                /*
+                  if ( maxData < minData ) { // Usually, the minimum is before the maximum, and sometimes it is not the default value.
+                        auto temp = maxData;
+                        maxData = minData;
+                        minData = temp;
+                    }
+                    int number = rand() % (maxData - minData + 1) + minData;
+                */
+                //rand() % amplData + minData; // ints tous inclus.
                 }
-            return "451236789";
+            return workString;
             }
         break;
         }
@@ -197,31 +241,15 @@ int input() { // Todo.
         }
     }
 
-// cout << interchange("abcdefgh", 0, 7) << endl; // Ok.
-string interchange(string startstring = "abcdefgh", int a = 0, int b = 3) { // Ok.
-    assert((a >= 0) && "Erreur de codage : a < 0 !");
-    assert((b >= 0) && "Erreur de codage : b < 0 !");
-    assert((a < startstring.size()) && "Erreur de codage : a > start !");
-    assert((b < startstring.size()) && "Erreur de codage : b > start !");
-    char x = startstring[a];
-    startstring[a] = startstring[b];
-    startstring[b] = x;
-    return startstring;
-    }
-
-string joue(string partie, int N) {
-    return "123456789";
-    }
 
 int main() {
-    // cout << testCombinaison() << endl;
     srand(time(NULL));       // No need for better init.
     config();
     intro(lgg);
-    int choixMenu = 3; // TODO.
+    int choixMenu = 0;
     string partie = "";
     while(!testCombinaison(partie)) {
-        // cout << "." ;
+        choixMenu = inputNb(-2, 20);
         partie = initMix(choixMenu);
         }
     replaceFileString(oldStart, partie);
