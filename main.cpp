@@ -8,14 +8,14 @@ string lgg = "en";
 string oldStart = "OldStart.txt";
 string oldContinue = "OldContinue.txt";
 
-bool errBadVAlue(string texteBadValue, auto min, auto max) {
+bool errBadVAlue(string texteBadValue, auto min, auto max) { // Ok.
     cerr << "Min = "  << min << endl;
     cerr << "Max = "  << max << endl;
     cerr << texteBadValue << endl;
     return false;
     }
 
-auto inputNb(auto max = 42, auto min = 0, string texteDemande = "How many?", string texteBadValue = "A good number!") {
+auto inputNb(auto max = 42, auto min = 0, string texteDemande = "How many?", string texteBadValue = "A good number!") { // Ok.
     if(max < min) {  // En général, on donne le minimum avant le maximum, et parfois pas la valeur par défaut.
         auto temp = max;
         max = min;
@@ -51,7 +51,7 @@ auto inputNb(auto max = 42, auto min = 0, string texteDemande = "How many?", str
     return a;
     }
 
-int replaceFileString(string file, string data = "") { // And create new file if does not exist.
+int replaceFileString(string file, string data = "") { // And create new file if does not exist.  // Ok.
     ofstream outfile(file.c_str());
     if(!outfile) {
         cerr << "Error: Impossible to write in the file " << file << "!" << endl;
@@ -64,7 +64,7 @@ int replaceFileString(string file, string data = "") { // And create new file if
     return 0; // Ok.
     }
 
-string read1DataFile(string file = "test.txt") {
+string read1DataFile(string file = "test.txt") { // Ok.
     ifstream myfile(file.c_str());
     if(myfile.is_open()) {
         string line = "";
@@ -77,11 +77,11 @@ string read1DataFile(string file = "test.txt") {
         }
     }
 
-void config() {
+void config() { // Ok.
     lgg = read1DataFile("lgg.txt");
     }
 
-void coutFile(string file = "cout.txt") {
+void coutFile(string file = "cout.txt") { // Ok.
     ifstream fichier(file.c_str(), ios::in);
     if(!fichier) {
         cerr << "Impossible to read the file: " << file << "!" << endl;
@@ -95,7 +95,7 @@ void coutFile(string file = "cout.txt") {
         }
     }
 
-void intro(string lgg = "fr") {
+void intro(string lgg = "fr") { // coutFile to use. Values.
 // fr:
     cout << "                -= OrdiCube =-" << endl;
     cout << "Vous devez obtenir 123456789 en permutant le premier chiffre avec le chiffre de votre choix." << endl;
@@ -110,11 +110,10 @@ void intro(string lgg = "fr") {
     }
 
 
-// cout << interchange("abcdefgh", 0, 7) << endl; // Ok.
 string interchange(string startString = "abcdefgh", int a = 0, int b = 3) { // Ok.
-    clog << "a: " << a << endl;
-    clog << "b: " << b << endl;
-    clog << "startstring: " << startString << endl;
+    // clog << "a: " << a << endl;
+    // clog << "b: " << b << endl;
+    // clog << "startstring: " << startString << endl;
     assert((a >= 0) && "Erreur de codage : a < 0 !");
     assert((b >= 0) && "Erreur de codage : b < 0 !");
     assert((a < startString.size()) && "Erreur de codage : a > start !");
@@ -138,11 +137,10 @@ int findPosIntString(int N = 0, string udt = "123456789") {
     }
 
 
-
 string joue(string partie, int N) { // ??
-    N = findPosIntString(N, partie); // ??
-    partie = interchange(partie, 1, N);
-//   partie = interchange(partie, (N - 1) % partie.size(), (N + 1) % partie.size());
+    N = findPosIntString(N, partie) + 0; // ??
+    partie = interchange(partie, 0, N);
+ partie = interchange(partie, (N - 1) % partie.size(), (N + 1) % partie.size());
     return partie;
     }
 
@@ -165,15 +163,6 @@ string initMix(int choixMenu = 2) { // Todo.
             string workString = "123456789";
             for(int a = 0; a < N; a++) {
                 workString = joue(workString, rand() % 9 + 1);
-                /*
-                  if ( maxData < minData ) { // Usually, the minimum is before the maximum, and sometimes it is not the default value.
-                        auto temp = maxData;
-                        maxData = minData;
-                        minData = temp;
-                    }
-                    int number = rand() % (maxData - minData + 1) + minData;
-                */
-                //rand() % amplData + minData; // ints tous inclus.
                 }
             return workString;
             }
